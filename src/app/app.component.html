@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Contacts</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table" *ngIf="!loading; else loadingTemp">
+        <tr>
+          <th>Name</th>
+          <th>Eftername</th>
+          <th>Adress</th>
+          <th>Telefon</th>
+          <th>Updaterad</th>
+        </tr>
+        <tr *ngFor="let contact of contacts">
+          <td>{{contact.firstName}}</td>
+          <td>{{contact.familyName}}</td>
+          <td>{{contact.street}}</td>
+          <td>{{contact.msisdn}}</td>
+          <td>{{contact.updated}}</td>
+        </tr>
+        <tfoot>
+          <tr>Total: {{total}}</tr>
+        </tfoot>
+      </table>
+      <ng-template #loadingTemp>
+        <h1>Loading..</h1>
+      </ng-template>
+
+    </div>
+    <div class="col-sm-12">
+      <button [disabled]="(offset + 10) > total" class="btn btn-primary" (click)="loadMore()">Load More</button>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
