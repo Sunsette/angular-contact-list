@@ -6,7 +6,7 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table" *ngIf="!loading; else loadingTemp">
+        <table class="table table-hover" *ngIf="!loading; else loadingTemp">
           <tr>
             <th>Namn</th>
             <th>Eftername</th>
@@ -14,7 +14,7 @@
             <th>Telefon</th>
             <th>Updaterad</th>
           </tr>
-          <tr *ngFor="let contact of contacts">
+          <tr *ngFor="let contact of contacts" (click)="selectContact(contact)">
             <td>{{contact.firstName | ifMissing:'Namn'}}</td>
             <td>{{contact.familyName | ifMissing:'Efternamn'}}</td>
             <td>{{contact.street | ifMissing:'Adress'}}</td>

@@ -1,5 +1,7 @@
+import { Contact } from './contact.model';
 import { ContactService } from './contact.service';
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contacts',
@@ -13,28 +15,29 @@ export class ContactsComponent implements OnInit {
   offset = 0;
   total = 0;
 
-  constructor(private contactService: ContactService) {
+  constructor(private contactService: ContactService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.loading = true;
     this.contactService.getContacts().subscribe((contacts) => {
       this.total = contacts.total;
-      contacts.rows.forEach((contact) => this.contacts.push(contact));
+      this.contacts.push(...contacts.rows);
       this.loading = false;
     });
   }
 
   loadMore() {
-    this.offset = this.offset + 10;
+    this.offset += 10;
     this.loading = true;
     this.contactService.getContacts(this.offset).subscribe((contacts) => {
-      //ADDED TIMEOUT TO SHOW THE LOADING TEMP FOR A BIT 
-      setTimeout(()=> {
-        this.loading = false;
-      }, 2000);
-      contacts.rows.forEach((contact) => this.contacts.push(contact));
+      this.loading = false;
+      this.contacts.push(...contacts.rows);
     });
+  }
+
+  selectContact(contact: Contact) {
+    this.router.navigate(['details/' + contact.contactId]);
   }
 
 }

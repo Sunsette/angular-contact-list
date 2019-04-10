@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Details</h1>
+    </div>
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <h1>Info</h1>
+            </div>
+            <div class="col-sm-6">
+              <h5>{{contact.firstName | ifMissing:'Namn'}}</h5>
+              <h5>{{contact.familyName | ifMissing:'Efternamn'}}</h5>
+              <h5>{{contact.msisdn | phoneFormat | ifMissing:'Telefon'}}</h5>
+              <h5>{{contact.street | ifMissing:'Gata'}}</h5>
+              <h5>{{contact.zip | ifMissing:'Postnummer'}}</h5>
+              <h5>{{contact.city | ifMissing:'Stad'}}</h5>
+              <h5>{{contact.email | ifMissing:'Email'}}</h5>
+            </div>
+            <div class="col-sm-2">
+              <button type="button" class="btn btn-primary btn-xs" (click)="edit()">Edit</button>
+            </div>
+          </div>
+          <hr />
+          <progressbar [value]="percentageFinished"></progressbar>
+          <div *ngIf="showSuccess" class="alert alert-success" role="alert">Contact saved successfully!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
