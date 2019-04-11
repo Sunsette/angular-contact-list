@@ -17,6 +17,7 @@ import { IfMissingPipe } from './shared/pipes/if-missing.pipe';
 import { ContactDetailsComponent } from './contact-details/contact-details.component';
 import { ContactDetailEditModalComponent } from './contact-details/contact-detail-edit-modal/contact-detail-edit-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {RequiredIfDirective} from './contact-details/required-if.directive';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     PhoneFormatPipe,
     IfMissingPipe,
     ContactDetailsComponent,
-    ContactDetailEditModalComponent
+    ContactDetailEditModalComponent,
+    RequiredIfDirective,
   ],
   imports: [
     BrowserModule,

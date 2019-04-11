@@ -36,9 +36,9 @@
       <label for="emailInput">Email</label>
       <input class="form-control" id="emailInput" placeholder="Email" formControlName="email">
     </div>
-    <div
-      *ngIf="(detailForm.get('email').invalid && detailForm.get('email').touched )|| (detailForm.get('address').invalid && detailForm.get('address').touched)"
-      class="alert alert-warning" role="alert">Fyll i email eller adress fälten.</div>
+    <div *ngIf="email.invalid && email.value.length > 0" class="alert alert-danger">Felaktig epost-format</div>
+    <hr>
+    <div *ngIf="email.invalid && address.invalid" class="alert alert-danger">Fyll i email eller address</div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Avbryt</button>

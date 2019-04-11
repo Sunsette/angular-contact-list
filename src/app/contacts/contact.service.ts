@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Contact, GetContactResponse } from './contact.model';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Contact, GetContactResponse} from './contact.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
 
-  token = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJlYUVtcGxveWVlSWQiOiI0YzM1MC1mYzZmOS03NGFmYi1jY2Q0ZS0wYjNhNS0yYWYyZi05MjEzNS1jNGE2MCIsImVhT2ZmaWNlSWQiOiI0NGU4Yi1jODlhNy1lNDBiMi1mN2MyYi1iODVkZS02MzgyYS0xNDdkNi00ZDg3NyIsImVtcGxveWVlRW1haWwiOiJkZXZlbG9wZXJAcXVlZHJvLmNvbSIsIm9yaWdpbiI6ImluaG91c2UiLCJvcmlnaW5hdGluZ0VtcGxveWVlSWQiOiIyOGVkYS1jMWQwMS0xNmVkNC00YzRiYS1mYjg5Ny0wOWMwOC1lNWMxMy0yOTVmOCIsIm9yaWdpbmF0aW5nT2ZmaWNlSWQiOiI0NGU4Yi1jODlhNy1lNDBiMi1mN2MyYi1iODVkZS02MzgyYS0xNDdkNi00ZDg3NyIsInJvbGVzIjpbImNybTIgYWRtaW5zIiwiYWRtaW4iXSwic3ViIjoiaXNhYmVsbGEiLCJleHAiOjE1NTQ4OTIxODUsImlhdCI6MTU1NDgwNTc4NX0.WgH-I0UcjcZSmPKTLMqEEUu15a5GVodrMoClh3RIPg4EP-fm-PrQ22tqbN-arZgL8rjK3iLQM7cq6joGPyS2QA';
+  token = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJlYUVtcGxveWVlSWQiOiI3ZGE5ZS05ZDJkOS00NTljNi05MDY2MS01ZDRlZS1lNTI4OC0yM2VkOC00NWI2MCIsImVhT2ZmaWNlSWQiOiI0NGU4Yi1jODlhNy1lNDBiMi1mN2MyYi1iODVkZS02MzgyYS0xNDdkNi00ZDg3NyIsImVtcGxveWVlRW1haWwiOiJhbGV4QHF1ZWRyby5jb20iLCJvcmlnaW4iOiJpbmhvdXNlIiwicm9sZXMiOlsiY3JtMiBhZG1pbnMiLCJhZG1pbiJdLCJzdWIiOiJmb2FkIiwiZXhwIjoxNTU1MDY4OTEzLCJpYXQiOjE1NTQ5ODI1MTN9.hKpGGkg0wlat16zOY2YT22AZCCXmpDBYSEvOsDe0vQaSI__16hNuYenYLKl1Iji6Dx1m69chRD0hS2kZVvKGaQ';
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -17,11 +17,12 @@ export class ContactService {
     })
   };
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   getContacts(offset?: number): Observable<GetContactResponse> {
-    return this.httpClient.get<GetContactResponse>(`http://localhost:9000/proxy/api/contacts?sortBy=firstName&` +
-      `sortOrder=asc&eaEmployeeId=28eda-c1d01-16ed4-4c4ba-fb897-09c08-e5c13-295f8&offset=${(offset ? offset : 0)}`, this.httpOptions);
+    return this.httpClient.get<GetContactResponse>(`http://localhost:9000/proxy/api/contacts?sortBy=insertDate&sortOrder=desc` +
+      `offset=${(offset ? offset : 0)}`, this.httpOptions);
   }
 
   getContactById(id: string): Observable<Contact> {
