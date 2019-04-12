@@ -8,7 +8,7 @@ const routes: Routes = [
     path: 'contacts', component: ContactsComponent
   },
   {
-    path: 'details/:id', component: ContactDetailsComponent
+    path: 'contacts/:id', component: ContactDetailsComponent
   }, 
   {
     path: '**', redirectTo: '/contacts'

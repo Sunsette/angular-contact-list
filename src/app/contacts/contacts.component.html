@@ -1,37 +1,38 @@
 <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <h1>Contacts</h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
-        <table class="table table-hover" *ngIf="!loading; else loadingTemp">
-          <tr>
-            <th>Namn</th>
-            <th>Eftername</th>
-            <th>Adress</th>
-            <th>Telefon</th>
-            <th>Updaterad</th>
-          </tr>
-          <tr *ngFor="let contact of contacts" (click)="selectContact(contact)">
-            <td>{{contact.firstName | ifMissing:'Namn'}}</td>
-            <td>{{contact.familyName | ifMissing:'Efternamn'}}</td>
-            <td>{{contact.street | ifMissing:'Adress'}}</td>
-            <td>{{contact.msisdn | phoneFormat | ifMissing:'Telefon'}}</td>
-            <td>{{contact.updated | amTimeAgo}}</td>
-          </tr>
-          <tfoot>
-            <tr>Total: {{contacts.length}} of {{total}}</tr>
-          </tfoot>
-        </table>
-        <ng-template #loadingTemp>
-          <h1>Loading..</h1>
-        </ng-template>
-  
-      </div>
-      <div class="col-sm-12">
-        <button [disabled]="(offset + 10) > total" class="btn btn-primary" (click)="loadMore()">Load More</button>
-      </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Contacts</h1>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-hover" *ngIf="!(contactStore$ | async).loading; else loadingTemp">
+        <tr>
+          <th>Namn</th>
+          <th>Eftername</th>
+          <th>Adress</th>
+          <th>Telefon</th>
+          <th>Updaterad</th>
+        </tr>
+        <tr *ngFor="let contact of (contactStore$ | async).list" (click)="selectContact(contact)">
+          <td>{{contact.firstName | ifMissing:'Namn'}}</td>
+          <td>{{contact.familyName | ifMissing:'Efternamn'}}</td>
+          <td>{{contact.street | ifMissing:'Adress'}}</td>
+          <td>{{contact.msisdn | phoneFormat | ifMissing:'Telefon'}}</td>
+          <td>{{contact.updated | amTimeAgo}}</td>
+        </tr>
+        <tfoot>
+          <tr>Total: {{(contactStore$ | async).list.length}} of {{(contactStore$ | async).total}}</tr>
+        </tfoot>
+      </table>
+      <ng-template #loadingTemp>
+        <h1>Loading..</h1>
+      </ng-template>
+
+    </div>
+    <div class="col-sm-12">
+      <button [disabled]="(offset + 10) > (contactStore$ | async).total" class="btn btn-primary"
+        (click)="loadMore()">Load More</button>
+    </div>
+  </div>
+</div>

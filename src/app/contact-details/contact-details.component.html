@@ -1,6 +1,11 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
+      <h5 routerLink="/contacts">
+        Go back
+      </h5>
+    </div>
+    <div class="col-sm-12">
       <h1>Details</h1>
     </div>
     <div class="col-sm-6">
@@ -10,14 +15,14 @@
             <div class="col-sm-4">
               <h1>Info</h1>
             </div>
-            <div class="col-sm-6">
-              <h5>{{contact.firstName | ifMissing:'Namn'}}</h5>
-              <h5>{{contact.familyName | ifMissing:'Efternamn'}}</h5>
-              <h5>{{contact.msisdn | phoneFormat | ifMissing:'Telefon'}}</h5>
-              <h5>{{contact.street | ifMissing:'Gata'}}</h5>
-              <h5>{{contact.zip | ifMissing:'Postnummer'}}</h5>
-              <h5>{{contact.city | ifMissing:'Stad'}}</h5>
-              <h5>{{contact.email | ifMissing:'Email'}}</h5>
+            <div class="col-sm-6" *ngIf="(selectedContact$ | async)">
+              <h5>{{(selectedContact$ | async).firstName | ifMissing:'Namn'}}</h5>
+              <h5>{{(selectedContact$ | async).familyName | ifMissing:'Efternamn'}}</h5>
+              <h5>{{(selectedContact$ | async).msisdn | phoneFormat | ifMissing:'Telefon'}}</h5>
+              <h5>{{(selectedContact$ | async).street | ifMissing:'Gata'}}</h5>
+              <h5>{{(selectedContact$ | async).zip | ifMissing:'Postnummer'}}</h5>
+              <h5>{{(selectedContact$ | async).city | ifMissing:'Stad'}}</h5>
+              <h5>{{(selectedContact$ | async).email | ifMissing:'Email'}}</h5>
             </div>
             <div class="col-sm-2">
               <button type="button" class="btn btn-primary btn-xs" (click)="edit()">Edit</button>

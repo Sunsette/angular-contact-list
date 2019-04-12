@@ -1,10 +1,17 @@
+import { map } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 import { Contact } from './../contacts/contact.model';
 import { ContactDetailEditModalComponent } from './contact-detail-edit-modal/contact-detail-edit-modal.component';
 import { ContactService } from './../contacts/contact.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { flatMap } from 'rxjs/operators';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import * as  ContactActions from './../contacts/store/contact.actions';
+import * as fromContacts from './../contacts/store/contact.reducer';
 
 
 @Component({
@@ -13,27 +20,35 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./contact-details.component.scss']
 })
 export class ContactDetailsComponent implements OnInit {
-  contact: Contact = {};
+
+  selectedContact$: Observable<Contact>;
   bsModalRef: BsModalRef;
   percentageFinished = 0;
   showSuccess = false;
   details: string[] = ['firstName', 'familyName', 'msisdn', 'street', 'zip', 'city', 'email'];
 
-  constructor(private route: ActivatedRoute, private contactService: ContactService,
-    private modalService: BsModalService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private contactService: ContactService,
+    private modalService: BsModalService,
+    private store: Store<fromContacts.AppState>) { }
 
   ngOnInit() {
     this.loadContact();
   }
 
   loadContact() {
-    this.route.params.pipe(flatMap(((params: Params) => {
-      return this.contactService.getContactById(params.id);
-    }))).subscribe((contact: Contact) => this.handleContact(contact));
+    this.selectedContact$ = this.store.select('contact').pipe(map((contact: fromContacts.State) => contact.selectedContact));
+    this.route.params.subscribe((params: Params) => this.store.dispatch(new ContactActions.FetchContact(params.id)));
+    this.selectedContact$.subscribe((contact: Contact) => {
+      if (contact) {
+        this.handleContact(contact);
+      }
+
+    });
   }
 
   handleContact(contact: Contact) {
-    this.contact = contact;
     let percentage = 0;
     this.details.forEach((prop) => {
       percentage += contact[prop] || contact[prop].length > 0 ? (100 / this.details.length) : 0;
@@ -43,17 +58,13 @@ export class ContactDetailsComponent implements OnInit {
 
   edit() {
     const initialState = {
-      contact: this.contact
+      selectedContact$: this.selectedContact$
     };
     this.bsModalRef = this.modalService.show(ContactDetailEditModalComponent, { initialState });
-    this.bsModalRef.content.saveInfo.pipe(flatMap((savedContactDetails: Contact) => {
-      return this.contactService.updateContact(savedContactDetails);
-    }))
-      .subscribe((savedContact: Contact) => {
-        this.showSuccess = true;
-        this.handleContact(savedContact);
+    this.bsModalRef.content.saveInfo
+      .subscribe((contact: Contact) => {
+        this.store.dispatch(new ContactActions.SaveContact(contact));
       });
-    this.bsModalRef.content.closeBtnName = 'Close';
   }
 
 }

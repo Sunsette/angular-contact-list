@@ -1,43 +1,52 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 import { Contact } from './contact.model';
-import { ContactService } from './contact.service';
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import * as ContactActions from './store/contact.actions';
+import * as fromContacts from './store/contact.reducer';
+
 
 @Component({
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss']
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnInit, OnDestroy {
 
+  contactStore$: Observable<fromContacts.State>;
   contacts = [];
   loading = false;
   offset = 0;
   total = 0;
 
-  constructor(private contactService: ContactService, private router: Router, private route: ActivatedRoute) {
+
+  constructor(
+    private router: Router,
+    private store: Store<fromContacts.AppState>) {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.contactService.getContacts().subscribe((contacts) => {
-      this.total = contacts.total;
-      this.contacts.push(...contacts.rows);
-      this.loading = false;
-    });
+    this.contactStore$ = this.store.select('contact');
+    this.store.dispatch(new ContactActions.StartLoading());
+    this.store.dispatch(new ContactActions.FetchContacts(this.offset));
+
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new ContactActions.ClearContacts());
   }
 
   loadMore() {
     this.offset += 10;
-    this.loading = true;
-    this.contactService.getContacts(this.offset).subscribe((contacts) => {
-      this.loading = false;
-      this.contacts.push(...contacts.rows);
-    });
+    this.store.dispatch(new ContactActions.StartLoading());
+    this.store.dispatch(new ContactActions.FetchContacts(this.offset));
   }
 
   selectContact(contact: Contact) {
-    this.router.navigate(['details/' + contact.contactId]);
+    this.router.navigate(['contacts/' + contact.contactId]);
   }
 
 }
