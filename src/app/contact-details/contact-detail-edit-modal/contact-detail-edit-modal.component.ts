@@ -89,10 +89,35 @@ export class ContactDetailEditModalComponent implements OnInit {
   }
 
   onSave() {
-    const { street, zip, city } = this.detailForm.value.address;
-    delete this.detailForm.value.address;
-    this.saveInfo.emit({ ...this.detailForm.value, street, zip, city, contactId: this.id });
+    const contact: any = this.getDirtyValues(this.detailForm);
+    contact.contactId = this.id;
+    this.saveInfo.emit(contact.address ? this.flatenAddress(contact) : contact);
     this.bsModalRef.hide();
+  }
+
+  flatenAddress(obj) {
+    const addressObj = { ...obj.address };
+    delete obj.address;
+    return { ...obj, ...addressObj };
+  }
+
+  getDirtyValues(form: any) {
+    const dirtyValues = {};
+    Object.keys(form.controls)
+      .forEach(key => {
+        const currentControl = form.controls[key];
+
+        if (currentControl.dirty) {
+          if (currentControl.controls) {
+            dirtyValues[key] = this.getDirtyValues(currentControl);
+          } else {
+            dirtyValues[key] = currentControl.value;
+
+          }
+        }
+      });
+
+    return dirtyValues;
   }
 
 
