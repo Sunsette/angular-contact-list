@@ -91,7 +91,7 @@ export class ContactDetailEditModalComponent implements OnInit {
   onSave() {
     const { street, zip, city } = this.detailForm.value.address;
     delete this.detailForm.value.address;
-    this.saveInfo.emit(Object.assign({}, this.detailForm.value, { contactId: this.id, street, zip, city }));
+    this.saveInfo.emit({ ...this.detailForm.value, street, zip, city, contactId: this.id });
     this.bsModalRef.hide();
   }
 
