@@ -5,7 +5,6 @@ import { Contact } from '../contact.model';
 export const SET_CONTACTS = 'SET_CONTACTS';
 export const SET_CONTACT = 'SET_CONTACT';
 export const FETCH_CONTACTS = 'FETCH_CONTACTS';
-export const START_LOADING = 'START_LOADING';
 export const FETCH_CONTACT = 'FETCH_CONTACT';
 export const SAVE_CONTACT = 'SAVE_CONTACT';
 export const CLEAR_CONTACTS = 'CLEAR_CONTACTS';
@@ -35,10 +34,6 @@ export class SaveContact implements Action {
     constructor(public payload: Contact) { }
 }
 
-export class StartLoading implements Action {
-    readonly type = START_LOADING;
-}
-
 export class ClearContacts implements Action {
     readonly type = CLEAR_CONTACTS;
 }
@@ -49,5 +44,4 @@ export type ContactActions =
     SetContacts |
     SetContact |
     SaveContact |
-    ClearContacts |
-    StartLoading;
+    ClearContacts;

@@ -30,7 +30,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.contactStore$ = this.store.select('contact');
-    this.store.dispatch(new ContactActions.StartLoading());
     this.store.dispatch(new ContactActions.FetchContacts(this.offset));
 
   }
@@ -41,7 +40,6 @@ export class ContactsComponent implements OnInit, OnDestroy {
 
   loadMore() {
     this.offset += 10;
-    this.store.dispatch(new ContactActions.StartLoading());
     this.store.dispatch(new ContactActions.FetchContacts(this.offset));
   }
 

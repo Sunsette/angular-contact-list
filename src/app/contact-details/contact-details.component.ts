@@ -29,7 +29,6 @@ export class ContactDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private contactService: ContactService,
     private modalService: BsModalService,
     private store: Store<fromContacts.AppState>) { }
 
@@ -39,7 +38,7 @@ export class ContactDetailsComponent implements OnInit {
 
   loadContact() {
     this.selectedContact$ = this.store.select('contact').pipe(map((contact: fromContacts.State) => contact.selectedContact));
-    this.route.params.subscribe((params: Params) => this.store.dispatch(new ContactActions.FetchContact(params.id)));
+    this.store.dispatch(new ContactActions.FetchContact(this.route.snapshot.params.id));
     this.selectedContact$.subscribe((contact: Contact) => {
       if (contact) {
         this.handleContact(contact);
